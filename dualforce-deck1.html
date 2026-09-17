@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DUALFORCE — One engine. Two energies.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DUALFORCE — web deck
+   Palette, type scale and layout mirror the PowerPoint version.
+   ============================================================ */
+:root{
+  --ink:#0E1116;
+  --slate:#1B2430;
+  --slate-2:#27323F;
+  --light:#F4F6F8;
+  --white:#FFFFFF;
+  --teal:#17C3B2;
+  --amber:#F2A254;
+  --rose:#E4572E;
+  --muted:#8A97A6;
+  --muted-d:#5D6B79;
+  --body:#39444F;
+
+  --head:"Fraunces", Cambria, Georgia, serif;
+  --sans:"Inter", Calibri, "Helvetica Neue", Arial, sans-serif;
+
+  --pad: clamp(1.5rem, 5vw, 5rem);
+  --card-radius: 14px;
+  --shadow: 0 10px 30px rgba(24,38,52,.10), 0 2px 6px rgba(24,38,52,.06);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  background:var(--light);
+  color:var(--body);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- deck scaffolding ---------- */
+.deck{
+  height:100vh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  scrollbar-width:none;
+}
+.deck::-webkit-scrollbar{display:none}
+
+.slide{
+  min-height:100vh;
+  scroll-snap-align:start;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:calc(var(--pad) * .9) var(--pad);
+  position:relative;
+}
+.slide.dark{background:var(--ink);color:#B9C4CF}
+.slide.light{background:var(--light);color:var(--body)}
+
+.kicker{
+  font-size:.72rem;letter-spacing:.22em;font-weight:700;text-transform:uppercase;
+  color:var(--muted-d);margin:0 0 .9rem;
+}
+.dark .kicker{color:var(--teal)}
+
+h1,h2{font-family:var(--head);font-weight:700;margin:0;color:var(--ink);line-height:1.08}
+.dark h1,.dark h2{color:var(--white)}
+h1{font-size:clamp(2.4rem,6vw,4rem)}
+h2{font-size:clamp(1.7rem,3.6vw,2.9rem)}
+.sub{margin:.9rem 0 0;font-size:clamp(.95rem,1.25vw,1.15rem);color:var(--muted-d);font-style:italic}
+.lede{margin:1.2rem 0 0;max-width:72ch;font-size:clamp(1rem,1.3vw,1.2rem);line-height:1.6}
+.dark .lede{color:#B9C4CF}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--white);border-radius:var(--card-radius);
+  padding:1.6rem 1.5rem;box-shadow:var(--shadow);
+}
+.dark .card{background:var(--slate);border:1px solid var(--slate-2);box-shadow:none}
+.card h3{
+  font-family:var(--head);font-size:1.25rem;margin:.9rem 0 .5rem;color:var(--ink);line-height:1.15;
+}
+.dark .card h3{color:var(--white)}
+.card p{margin:0;font-size:.95rem;line-height:1.55}
+.dark .card p{color:#A9B6C2}
+
+.grid{display:grid;gap:1.15rem;margin-top:1.8rem}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+/* ---------- icon discs ---------- */
+.disc{
+  width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;flex:0 0 auto;
+}
+.disc svg{width:26px;height:26px}
+.disc.teal {background:rgba(23,195,178,.15); color:var(--teal)}
+.disc.amber{background:rgba(242,162,84,.18); color:var(--amber)}
+.disc.rose {background:rgba(228,87,46,.14);  color:var(--rose)}
+.dark .disc.teal {background:rgba(23,195,178,.20)}
+.dark .disc.amber{background:rgba(242,162,84,.20)}
+
+/* ---------- bullets ---------- */
+ul.ticks{list-style:none;margin:1rem 0 0;padding:0}
+ul.ticks li{
+  position:relative;padding-left:1.1rem;margin-bottom:.6rem;
+  font-size:.94rem;line-height:1.45;
+}
+ul.ticks li::before{
+  content:"";position:absolute;left:0;top:.52em;
+  width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45;
+}
+
+/* ---------- slide 1 : title ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center}
+.brand{
+  font-size:.95rem;font-weight:700;letter-spacing:.42em;color:var(--teal);margin:0 0 2.2rem;
+}
+.hero h1{font-size:clamp(2.6rem,6.6vw,4.6rem);line-height:.98}
+.hero .lede{color:#B9C4CF;max-width:46ch}
+.stamp{margin-top:2.6rem;font-size:.8rem;letter-spacing:.1em;color:var(--muted-d)}
+.venn{width:100%;max-width:460px;margin-inline:auto;display:block}
+
+/* ---------- row cards (problem grid, remedies) ---------- */
+.row{display:flex;gap:1rem;align-items:flex-start}
+.row .disc{width:46px;height:46px}
+.row .disc svg{width:22px;height:22px}
+.row h4{margin:.15rem 0 .35rem;font-size:1.02rem;font-weight:700;color:var(--ink)}
+.dark .row h4{color:var(--white)}
+.row p{margin:0;font-size:.9rem;line-height:1.5}
+
+.stat{background:var(--ink);color:#AFBCC8;box-shadow:none}
+.stat .big{font-family:var(--head);font-size:clamp(1.8rem,3vw,2.4rem);color:var(--teal);margin:0 0 .35rem}
+.stat p{color:#AFBCC8}
+
+/* ---------- banner ---------- */
+.banner{
+  margin-top:1.6rem;background:var(--ink);color:var(--white);
+  border-radius:var(--card-radius);padding:1.4rem 1.6rem;text-align:center;
+  font-size:clamp(.95rem,1.2vw,1.08rem);line-height:1.5;
+}
+.dark .banner{background:var(--slate-2);color:var(--teal);text-align:center}
+
+/* ---------- numbered steps ---------- */
+.steps{margin-top:1.6rem;display:grid;gap:1.3rem}
+.step{display:flex;gap:1rem;align-items:flex-start}
+.num{
+  width:30px;height:30px;border-radius:50%;background:var(--teal);color:#fff;
+  display:grid;place-items:center;font-size:.85rem;font-weight:700;flex:0 0 auto;
+}
+.step h4{margin:.15rem 0 .3rem;font-size:1.02rem;font-weight:700;color:var(--ink)}
+.dark .step h4{color:var(--white)}
+.step p{margin:0;font-size:.92rem;line-height:1.5}
+
+/* ---------- two-column technology slide ---------- */
+.tech{display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:center;margin-top:1.4rem}
+.diagram-card{
+  background:var(--white);border-radius:var(--card-radius);box-shadow:var(--shadow);
+  padding:1.2rem;text-align:center;
+}
+.diagram-card svg{width:100%;height:auto;max-height:58vh}
+.diagram-card figcaption{margin-top:.6rem;font-size:.85rem;font-style:italic;color:var(--muted-d)}
+
+/* ---------- anatomy cards ---------- */
+.part .no{font-family:var(--head);font-size:1.6rem;font-weight:700;color:var(--teal)}
+.part.warm .no{color:var(--amber)}
+.part .top{display:flex;justify-content:space-between;align-items:center}
+.part .top svg{width:24px;height:24px;color:var(--teal)}
+.part.warm .top svg{color:var(--amber)}
+.part h3{margin:.7rem 0 .4rem;font-family:var(--sans);font-size:1.02rem;font-weight:700}
+
+/* ---------- remedy rows ---------- */
+.fix{display:grid;grid-template-columns:1fr auto 1.35fr;gap:1.2rem;align-items:center}
+.fix .side{display:flex;gap:.9rem;align-items:center}
+.tag{font-size:.65rem;letter-spacing:.16em;font-weight:700;text-transform:uppercase}
+.tag.bad{color:var(--rose)} .tag.good{color:var(--teal)}
+.fix h4{margin:.2rem 0 0;font-size:.98rem;font-weight:700;color:var(--ink)}
+.fix p{margin:.2rem 0 0;font-size:.92rem;line-height:1.45}
+.arrow{color:var(--ink);opacity:.5}
+.arrow svg{width:22px;height:22px}
+
+/* ---------- modes ---------- */
+.mode .tagline{font-size:.7rem;letter-spacing:.14em;font-weight:700;text-transform:uppercase;margin:.1rem 0 .7rem}
+.mode.teal  .tagline{color:var(--teal)}
+.mode.amber .tagline{color:var(--amber)}
+.mode.rose  .tagline{color:var(--rose)}
+
+/* ---------- closing ---------- */
+.close{display:grid;grid-template-columns:1.2fr .8fr;gap:2rem;align-items:center}
+.close h1{font-size:clamp(2.1rem,4.6vw,3.4rem);line-height:1.08}
+.roadmap{margin-top:2.2rem;display:grid;gap:1.1rem}
+.rm{display:grid;grid-template-columns:2.4rem 12rem 1fr;gap:1rem;align-items:baseline}
+.rm .n{font-family:var(--head);font-size:1.3rem;font-weight:700;color:var(--amber)}
+.rm .t{font-weight:700;color:var(--white)}
+.rm .d{font-size:.92rem;color:#9FADBA}
+.foot{margin-top:2.4rem;font-size:.78rem;letter-spacing:.08em;color:var(--muted-d)}
+
+/* ---------- navigation ---------- */
+.progress{
+  position:fixed;top:0;left:0;height:3px;background:var(--teal);width:0;z-index:50;
+  transition:width .15s linear;
+}
+.dots{
+  position:fixed;right:1rem;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:.55rem;z-index:50;
+}
+.dots button{
+  width:9px;height:9px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:var(--muted);opacity:.38;transition:all .2s;
+}
+.dots button:hover{opacity:.7}
+.dots button[aria-current="true"]{background:var(--teal);opacity:1;transform:scale(1.35)}
+.hint{
+  position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);
+  font-size:.72rem;letter-spacing:.1em;color:var(--muted);z-index:50;
+  opacity:.8;transition:opacity .4s;pointer-events:none;
+}
+.hint.gone{opacity:0}
+
+
+.ref-gallery{display:grid;grid-template-columns:1.6fr 1.6fr 1fr;gap:1rem;align-items:start}
+.ref-gallery figure{margin:0;background:var(--light);border-radius:10px;padding:.6rem;border:1px solid #E3E8EC}
+.ref-gallery img{width:100%;height:auto;display:block;border-radius:6px;background:#fff}
+.ref-gallery figcaption{margin-top:.55rem;font-size:.78rem;color:var(--muted-d);text-align:center;line-height:1.35}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .hero,.tech,.close{grid-template-columns:1fr}
+  .venn{max-width:320px;order:-1}
+  .diagram-card svg{max-height:none}
+}
+@media (max-width:720px){
+  .ref-gallery{grid-template-columns:1fr}
+  .deck{scroll-snap-type:none;height:auto;overflow:visible}
+  .slide{min-height:auto;padding:3.2rem 1.35rem}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .fix{grid-template-columns:1fr;gap:.8rem}
+  .arrow{display:none}
+  .rm{grid-template-columns:2rem 1fr;row-gap:.2rem}
+  .rm .d{grid-column:2}
+  .dots,.hint{display:none}
+}
+
+/* ---------- print / PDF ---------- */
+@media print{
+  .dots,.hint,.progress{display:none}
+  .deck{height:auto;overflow:visible}
+  .slide{min-height:auto;page-break-after:always;padding:2rem}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<!-- ============ icon sprite ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="i-base" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></g>
+  </defs>
+  <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="flame" viewBox="0 0 24 24"><path d="M12 2c3 4 6 6.2 6 11a6 6 0 0 1-12 0c0-2.2 1-3.8 2.2-5.2.4 1.6 1.4 2.3 2.3 2.3C11.2 8.2 10.2 5.2 12 2Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="plug" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 2v6M15 2v6M6 8h12v2.5a6 6 0 0 1-12 0V8ZM12 16.5V22"/></g></symbol>
+  <symbol id="pump" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17M2.5 21h12M6.5 6.5h4V10h-4zM13 8.5h3l2 2.5v6a1.6 1.6 0 0 0 3 0V12"/></g></symbol>
+  <symbol id="smog" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 14.5a3.6 3.6 0 0 1 .9-7.1A4.8 4.8 0 0 1 16.4 8a3.3 3.3 0 0 1 .4 6.5ZM5 18h10M8.5 21h8"/></g></symbol>
+  <symbol id="weight" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 8h10l2 12H5ZM9.2 8a2.8 2.8 0 1 1 5.6 0"/></g></symbol>
+  <symbol id="gauge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 12l4.5-3.5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></g></symbol>
+  <symbol id="ban" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></g></symbol>
+  <symbol id="money" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5l5.5-5.5 3.2 3.2L20 7"/><path d="M15.5 7H20v4.5"/></g></symbol>
+  <symbol id="road" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3v3.5M12 10.2v3.5M12 17.5V21M6.5 21 8.5 3M17.5 21 15.5 3"/></g></symbol>
+  <symbol id="battery" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="18" height="10" rx="2.5"/><path d="M22 10.5v3"/><rect x="4.5" y="9.5" width="4" height="5" rx="1" fill="currentColor" stroke="none"/></g></symbol>
+  <symbol id="mountain" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2.5 19.5 9 9.5l3.8 5.2L15.6 11l5.9 8.5Z"/><circle cx="17.5" cy="6" r="2.2"/></g></symbol>
+  <symbol id="sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5Z"/><path d="M15.8 9a4.5 4.5 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4"/></g></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4.5" y="10" width="15" height="10.5" rx="2.4"/><path d="M8.2 10V7.2a3.8 3.8 0 0 1 7.6 0V10"/></g></symbol>
+  <symbol id="magnet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 4h5v9a3 3 0 0 0 6 0V4h5v9a8 8 0 0 1-16 0Z"/><path d="M4 9.5h5M15 9.5h5"/></g></symbol>
+  <symbol id="rotate" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 12a8.5 8.5 0 1 1-2.8-6.3"/><path d="M20.5 3.8v5h-5"/></g></symbol>
+  <symbol id="wrench" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M15.2 3.2a5 5 0 0 0-4.5 7.1L3 18v3h3l7.7-7.7a5 5 0 0 0 5.5-7.8l-2.8 2.8-2.6-.4-.4-2.6Z"/></g></symbol>
+  <symbol id="layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.8 21 8l-9 5.2L3 8Z"/><path d="M3 12.6 12 17.8 21 12.6M3 16.8 12 22l9-5.2"/></g></symbol>
+  <symbol id="chip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6.5" y="6.5" width="11" height="11" rx="1.6"/><rect x="10" y="10" width="4" height="4" rx=".8"/><path d="M9.5 3v3.5M14.5 3v3.5M9.5 17.5V21M14.5 17.5V21M3 9.5h3.5M3 14.5h3.5M17.5 9.5H21M17.5 14.5H21"/></g></symbol>
+  <symbol id="snow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2v20M3.5 7l17 10M20.5 7l-17 10M12 6l-2.6-2.4M12 6l2.6-2.4M12 18l-2.6 2.4M12 18l2.6 2.4"/></g></symbol>
+  <symbol id="shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.8 20 6v6c0 5-3.6 8.4-8 9.2C7.6 20.4 4 17 4 12V6Z"/></g></symbol>
+  <symbol id="compass" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v3.4M8 20.8 12 6.6l4 14.2M9.4 16.2h5.2"/><circle cx="12" cy="3.2" r="1.4"/></g></symbol>
+  <symbol id="car" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 16.5v-3l2-5.2h12l2 5.2v3M3 16.5h18"/><circle cx="7.5" cy="17.6" r="1.7"/><circle cx="16.5" cy="17.6" r="1.7"/></g></symbol>
+  <symbol id="flag" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5.5 21V3.4M5.5 4h13l-3 4 3 4h-13"/></g></symbol>
+  <symbol id="temp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 14.6V5.2a2 2 0 1 0-4 0v9.4a4.2 4.2 0 1 0 4 0Z"/><circle cx="19" cy="6" r="1.6"/></g></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 20 12l-6.5 5.5"/></g></symbol>
+  <symbol id="bike" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17" r="3.2"/><circle cx="18.5" cy="17" r="3.2"/><path d="M5.5 17 9 9h4l3 4.5h3.5M9 9 7.5 6h-2M13 9l2.2 4.8"/></g></symbol>
+  <symbol id="sensor" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><path d="M8.3 8.3a5.2 5.2 0 0 0 0 7.4M15.7 8.3a5.2 5.2 0 0 1 0 7.4M5.3 5.3a9.6 9.6 0 0 0 0 13.4M18.7 5.3a9.6 9.6 0 0 1 0 13.4"/></g></symbol>
+  <symbol id="droplet" viewBox="0 0 24 24"><path d="M12 2.5c3 4 6.2 7.6 6.2 11.7a6.2 6.2 0 1 1-12.4 0C5.8 10.1 9 6.5 12 2.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="battery2" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="7.5" rx="2"/><rect x="2" y="14.5" width="20" height="7.5" rx="2"/><path d="M6 8.7h4M6 18.2h4"/></g></symbol>
+</svg>
+
+<main class="deck" id="deck">
+
+<!-- ================= 1. TITLE ================= -->
+<section class="slide dark">
+  <div class="hero">
+    <div>
+      <p class="brand">DUALFORCE</p>
+      <h1>One engine.<br>Two energies.</h1>
+      <p class="lede">A solenoid-piston hybrid engine that drives on electricity and fuel in equal measure — at any speed, in any mode, serviceable by any mechanic.</p>
+      <p class="stamp">STARTUP CONCEPT PITCH &nbsp;·&nbsp; POWERTRAIN INNOVATION &nbsp;·&nbsp; 2026</p>
+    </div>
+    <svg class="venn" viewBox="0 0 320 320" aria-label="Two overlapping rings representing electric and fuel energy">
+      <circle cx="195" cy="120" r="96" fill="none" stroke="#17C3B2" stroke-width="2"/>
+      <circle cx="130" cy="200" r="96" fill="none" stroke="#F2A254" stroke-width="2"/>
+      <circle cx="163" cy="160" r="34" fill="#17C3B2" opacity=".18"/>
+      <g color="#17C3B2" transform="translate(212,72) scale(1.5)"><use href="#bolt"/></g>
+      <text x="234" y="130" fill="#17C3B2" font-family="Inter,sans-serif" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">ELECTRIC</text>
+      <g color="#F2A254" transform="translate(74,196) scale(1.5)"><use href="#flame"/></g>
+      <text x="92" y="254" fill="#F2A254" font-family="Inter,sans-serif" font-size="11" font-weight="700" letter-spacing="2" text-anchor="middle">FUEL</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ================= 2. THE COMPROMISE ================= -->
+<section class="slide light">
+  <p class="kicker">The market today</p>
+  <h2>Every drivetrain forces a compromise</h2>
+  <p class="sub">Buyers are asked to give up range, efficiency or freedom — and often all three.</p>
+
+  <div class="grid g3">
+    <article class="card">
+      <div class="disc teal"><svg><use href="#plug"/></svg></div>
+      <h3>Pure Electric</h3>
+      <ul class="ticks">
+        <li>Charging stops every 100–150 km</li>
+        <li>Power collapses below 20–30% charge</li>
+        <li>Thin rural charging coverage</li>
+        <li>Dealer-locked diagnostics and repair</li>
+      </ul>
+    </article>
+    <article class="card">
+      <div class="disc rose"><svg><use href="#smog"/></svg></div>
+      <h3>Combustion</h3>
+      <ul class="ticks">
+        <li>Carbon emissions at the tailpipe</li>
+        <li>Exposure to rising fuel prices</li>
+        <li>No flex-fuel adaptability</li>
+        <li>High running cost per kilometre</li>
+      </ul>
+    </article>
+    <article class="card">
+      <div class="disc amber"><svg><use href="#weight"/></svg></div>
+      <h3>Today's Hybrid</h3>
+      <ul class="ticks">
+        <li>Electric drive capped under 40 km/h</li>
+        <li>Fuel does almost all the work</li>
+        <li>Heavier for the same output</li>
+        <li>Not convertible between modes</li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="banner">The market is being asked to choose between range, cleanliness and freedom. DUALFORCE removes the choice.</div>
+</section>
+
+<!-- ================= 3. EV PROBLEM ================= -->
+<section class="slide light">
+  <p class="kicker">Problem 01 — the electric vehicle</p>
+  <h2>Clean, until the battery runs thin</h2>
+
+  <div class="grid g2">
+    <article class="card row">
+      <div class="disc teal"><svg><use href="#road"/></svg></div>
+      <div><h4>Range anxiety on highways</h4><p>Pure EVs need a charging hub every 100–150 km, breaking the rhythm of long-distance travel.</p></div>
+    </article>
+    <article class="card row">
+      <div class="disc teal"><svg><use href="#battery"/></svg></div>
+      <div><h4>The limp-home crisis</h4><p>Below 20–30% charge, output plummets — drivers are left crawling, stranded, or waiting on a tow.</p></div>
+    </article>
+    <article class="card row">
+      <div class="disc teal"><svg><use href="#mountain"/></svg></div>
+      <div><h4>Rural blind spots</h4><p>Away from the corridors, charging infrastructure thins out and the risk of being towed climbs.</p></div>
+    </article>
+    <article class="card row">
+      <div class="disc teal"><svg><use href="#sound"/></svg></div>
+      <div><h4>Silence that hides you</h4><p>Enthusiasts lose the exhaust note, and pedestrians lose the audible cue that a car is approaching.</p></div>
+    </article>
+    <article class="card row">
+      <div class="disc teal"><svg><use href="#lock"/></svg></div>
+      <div><h4>A closed service monopoly</h4><p>Faults demand proprietary OEM software, making independent and roadside repair near impossible.</p></div>
+    </article>
+    <article class="card stat">
+      <p class="big">100–150 km</p>
+      <p>the interval that dictates how far a driver dares to go</p>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 4. ICE + HYBRID ================= -->
+<section class="slide light">
+  <p class="kicker">Problem 02 — fuel and the half-measure</p>
+  <h2>Combustion pollutes. The hybrid only pretends.</h2>
+
+  <div class="grid g2">
+    <article class="card">
+      <h3>The combustion engine</h3>
+      <p class="sub" style="margin:.2rem 0 1.2rem">Proven, but on the wrong side of history</p>
+      <div class="steps" style="margin:0;gap:1rem">
+        <div class="row"><div class="disc rose"><svg><use href="#smog"/></svg></div><div><h4>Carbon emissions</h4><p>Every kilometre is paid for at the tailpipe.</p></div></div>
+        <div class="row"><div class="disc rose"><svg><use href="#pump"/></svg></div><div><h4>Fuel consumption</h4><p>Running cost tracks the pump, not the driver.</p></div></div>
+        <div class="row"><div class="disc rose"><svg><use href="#ban"/></svg></div><div><h4>No flex-fuel ability</h4><p>Locked to one fuel chemistry for life.</p></div></div>
+        <div class="row"><div class="disc rose"><svg><use href="#money"/></svg></div><div><h4>Rising fossil fuel prices</h4><p>Cost of ownership drifts upward year on year.</p></div></div>
+      </div>
+    </article>
+    <article class="card">
+      <h3>The conventional hybrid</h3>
+      <p class="sub" style="margin:.2rem 0 1.2rem">A combustion engine with a bigger starter motor</p>
+      <div class="steps" style="margin:0;gap:1rem">
+        <div class="row"><div class="disc amber"><svg><use href="#gauge"/></svg></div><div><h4>Electric only under 40 km/h</h4><p>The motor quits exactly when the journey begins.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#flame"/></svg></div><div><h4>Fuel does the real work</h4><p>Electricity is a garnish, not a power source.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#ban"/></svg></div><div><h4>Not convertible</h4><p>You cannot choose a mode — the car chooses for you.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#weight"/></svg></div><div><h4>Heavier for the same output</h4><p>Two systems carried, one genuinely used.</p></div></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 5. SOLUTION ================= -->
+<section class="slide dark">
+  <p class="kicker">Our solution</p>
+  <h2>A true 50 / 50 hybrid — built like a race car</h2>
+  <p class="lede">DUALFORCE replaces the compromise with a single engine that treats electricity and fuel as equal partners, the way Formula 1 power units do. A solenoid piston reproduces the motion of a combustion engine using electromagnetic force — inside a block that still breathes, burns and fires when you want it to.</p>
+
+  <div class="grid g4">
+    <article class="card">
+      <div class="disc teal"><svg><use href="#bolt"/></svg></div>
+      <h3>Equal split of power</h3>
+      <p>Electric and fuel contribute together, at any road speed — no 40 km/h ceiling.</p>
+    </article>
+    <article class="card">
+      <div class="disc teal"><svg><use href="#magnet"/></svg></div>
+      <h3>Solenoid piston drive</h3>
+      <p>Copper windings push a magnetic piston through the same stroke a cylinder always used.</p>
+    </article>
+    <article class="card">
+      <div class="disc amber"><svg><use href="#rotate"/></svg></div>
+      <h3>Run either mode fully</h3>
+      <p>Drive it as a pure EV, as a pure IC car, or blend the two on the move.</p>
+    </article>
+    <article class="card">
+      <div class="disc amber"><svg><use href="#wrench"/></svg></div>
+      <h3>Combat design, DIY repair</h3>
+      <p>Rugged, open architecture that a roadside mechanic can actually service.</p>
+    </article>
+  </div>
+
+  <p style="text-align:center;margin-top:1.6rem;font-size:.78rem;letter-spacing:.14em;font-weight:700;color:var(--teal)">
+    0 → 100% ELECTRIC &nbsp;·&nbsp; 0 → 100% FUEL &nbsp;·&nbsp; ANY BLEND, ANY SPEED
+  </p>
+</section>
+
+<!-- ================= 6. TECHNOLOGY + DIAGRAM ================= -->
+<section class="slide light">
+  <p class="kicker">The technology</p>
+  <h2>A piston pushed by magnetism, not only by fire</h2>
+
+  <div class="tech">
+    <div>
+      <p class="lede">The block, the crank and the cylinder head stay familiar. What changes is the cylinder wall: copper windings are wound into the space around each bore, and the piston itself is magnetic.</p>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><div><h4>Energise the coil</h4><p>The winding generates a field that repels the magnetic piston and drives it down the bore.</p></div></div>
+        <div class="step"><div class="num">2</div><div><h4>Fire cylinders in sequence</h4><p>Parallel cylinders repeat the action in order, turning linear push into rotation.</p></div></div>
+        <div class="step"><div class="num">3</div><div><h4>Share one crankshaft</h4><p>Both the magnetic stroke and the combustion stroke deliver torque to the same shaft.</p></div></div>
+      </div>
+    </div>
+
+    <figure class="diagram-card" style="margin:0">
+      <svg viewBox="0 0 420 470" aria-label="Cutaway of one cylinder showing copper windings, magnetic piston and crankshaft">
+        <!-- cylinder head -->
+        <rect x="120" y="30" width="160" height="30" rx="5" fill="#27323F"/>
+        <!-- valves + plug marks -->
+        <rect x="145" y="38" width="8" height="14" rx="3" fill="#8A97A6"/>
+        <rect x="196" y="34" width="8" height="18" rx="3" fill="#F4F6F8"/>
+        <rect x="247" y="38" width="8" height="14" rx="3" fill="#8A97A6"/>
+        <!-- cylinder body -->
+        <rect x="133" y="60" width="134" height="200" fill="#E6EBEF" stroke="#5D6B79" stroke-width="2"/>
+        <!-- coil windings straddling both walls -->
+        <g fill="#E6EBEF" stroke="#17C3B2" stroke-width="2.5">
+          <circle cx="133" cy="82"  r="12"/><circle cx="267" cy="82"  r="12"/>
+          <circle cx="133" cy="118" r="12"/><circle cx="267" cy="118" r="12"/>
+          <circle cx="133" cy="154" r="12"/><circle cx="267" cy="154" r="12"/>
+          <circle cx="133" cy="190" r="12"/><circle cx="267" cy="190" r="12"/>
+          <circle cx="133" cy="226" r="12"/><circle cx="267" cy="226" r="12"/>
+        </g>
+        <!-- magnetic piston -->
+        <rect x="141" y="118" width="118" height="46" rx="5" fill="#F2A254" stroke="#D98B3C" stroke-width="2"/>
+        <!-- push arrow -->
+        <path d="M200 180v36M186 208l14 16 14-16" fill="none" stroke="#17C3B2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>
+        <!-- con rod + crank -->
+        <path d="M200 260v34" stroke="#5D6B79" stroke-width="4"/>
+        <circle cx="200" cy="332" r="38" fill="#E6EBEF" stroke="#5D6B79" stroke-width="3"/>
+        <circle cx="200" cy="318" r="8" fill="#17C3B2"/>
+        <!-- leader lines + labels -->
+        <g stroke="#C3CCD5" stroke-width="1.5">
+          <path d="M282 45h22"/><path d="M282 140h22"/><path d="M282 226h22"/><path d="M242 332h62"/>
+        </g>
+        <g font-family="Inter,sans-serif" font-size="12.5" font-weight="600" fill="#5D6B79">
+          <text x="310" y="49">Valves + spark plug</text>
+          <text x="310" y="144">Magnetic piston</text>
+          <text x="310" y="230">Copper windings</text>
+          <text x="310" y="329">Crankshaft +</text>
+          <text x="310" y="345">timing chain</text>
+        </g>
+      </svg>
+      <figcaption>One bore, two ways to make the same stroke.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= 7. ANATOMY ================= -->
+<section class="slide light">
+  <p class="kicker">Mechanical architecture</p>
+  <h2>Five parts, one familiar engine</h2>
+  <p class="sub">Built on hardware the industry already knows how to manufacture and repair.</p>
+
+  <div class="grid g3">
+    <article class="card part">
+      <div class="top"><span class="no">01</span><svg><use href="#layers"/></svg></div>
+      <h3>Engine chassis</h3>
+      <p>A block laid out like a conventional combustion engine, so tooling and know-how carry over.</p>
+    </article>
+    <article class="card part">
+      <div class="top"><span class="no">02</span><svg><use href="#magnet"/></svg></div>
+      <h3>Magnetic piston</h3>
+      <p>The moving heart of the electric stroke — driven by field force instead of pressure alone.</p>
+    </article>
+    <article class="card part">
+      <div class="top"><span class="no">03</span><svg><use href="#bolt"/></svg></div>
+      <h3>Copper windings</h3>
+      <p>Wound into the cavity around the cylinder wall to create the repulsive drive field.</p>
+    </article>
+    <article class="card part warm">
+      <div class="top"><span class="no">04</span><svg><use href="#flame"/></svg></div>
+      <h3>Valves and spark plug</h3>
+      <p>Intake, exhaust and ignition sit in the cylinder head, exactly where a mechanic expects them.</p>
+    </article>
+    <article class="card part warm">
+      <div class="top"><span class="no">05</span><svg><use href="#rotate"/></svg></div>
+      <h3>Crankshaft and timing chain</h3>
+      <p>Converts both strokes into the single rotation that reaches the wheels.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ================= 8. TWO POWER PATHS ================= -->
+<section class="slide dark">
+  <p class="kicker">How it works</p>
+  <h2>Two power paths, one crankshaft</h2>
+
+  <div class="grid g2">
+    <article class="card">
+      <div class="row" style="align-items:center">
+        <div class="disc teal"><svg><use href="#bolt"/></svg></div>
+        <h3 style="margin:0">The electric stroke</h3>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><p>Current enters the copper winding surrounding the cylinder.</p></div>
+        <div class="step"><div class="num">2</div><p>The field repels the magnetic piston and pushes it down the bore.</p></div>
+        <div class="step"><div class="num">3</div><p>Parallel cylinders repeat the push in firing order.</p></div>
+        <div class="step"><div class="num">4</div><p>The crankshaft turns — rotational motion reaches the wheels.</p></div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="row" style="align-items:center">
+        <div class="disc amber"><svg><use href="#flame"/></svg></div>
+        <h3 style="margin:0">The combustion stroke</h3>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num" style="background:var(--amber)">1</div><p>Intake — the charge is drawn into the cylinder.</p></div>
+        <div class="step"><div class="num" style="background:var(--amber)">2</div><p>Compression — the piston rises and squeezes the mixture.</p></div>
+        <div class="step"><div class="num" style="background:var(--amber)">3</div><p>Power — the plug fires and drives the piston down.</p></div>
+        <div class="step"><div class="num" style="background:var(--amber)">4</div><p>Exhaust — spent gas is cleared through the head.</p></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="banner">Because both paths act on the same crankshaft, switching between them needs no second drivetrain — and no speed limit.</div>
+</section>
+
+<!-- ================= 9. MODES ================= -->
+<section class="slide light">
+  <p class="kicker">The driving experience</p>
+  <h2>Three modes. The driver picks.</h2>
+
+  <div class="grid g3">
+    <article class="card mode teal">
+      <div class="disc teal"><svg><use href="#plug"/></svg></div>
+      <h3>Pure electric</h3>
+      <p class="tagline">City and short commutes</p>
+      <p>Silent, zero-tailpipe running for daily use — full electric drive without the 40 km/h ceiling that limits conventional hybrids.</p>
+    </article>
+    <article class="card mode amber">
+      <div class="disc amber"><svg><use href="#pump"/></svg></div>
+      <h3>Pure combustion</h3>
+      <p class="tagline">Highways and rural roads</p>
+      <p>Refuel anywhere in minutes and keep the exhaust note enthusiasts want. No charging map, no limp-home mode, no tow truck.</p>
+    </article>
+    <article class="card mode rose">
+      <div class="disc rose"><svg><use href="#flag"/></svg></div>
+      <h3>Blended F1 mode</h3>
+      <p class="tagline">When you want everything</p>
+      <p>Both systems contribute together at any road speed, splitting the load the way a race power unit does.</p>
+    </article>
+  </div>
+
+  <div class="banner">One vehicle covers the city commute, the highway run and the back road — no second car, no compromise.</div>
+</section>
+
+<!-- ================= 10. CHALLENGES ================= -->
+<section class="slide light">
+  <p class="kicker">Engineering honesty</p>
+  <h2>What stands in the way — and how we answer it</h2>
+
+  <div class="grid" style="gap:.9rem">
+    <article class="card fix" style="padding:1.1rem 1.4rem">
+      <div class="side"><div class="disc rose"><svg><use href="#bolt"/></svg></div><div><span class="tag bad">Challenge</span><h4>Eddy current losses</h4></div></div>
+      <div class="arrow"><svg><use href="#arrow"/></svg></div>
+      <div class="side"><div class="disc teal"><svg><use href="#chip"/></svg></div><div><span class="tag good">Remedy</span><p>Re-engineer the coil winding pattern to cut induced circulating currents.</p></div></div>
+    </article>
+    <article class="card fix" style="padding:1.1rem 1.4rem">
+      <div class="side"><div class="disc rose"><svg><use href="#temp"/></svg></div><div><span class="tag bad">Challenge</span><h4>Heat generation</h4></div></div>
+      <div class="arrow"><svg><use href="#arrow"/></svg></div>
+      <div class="side"><div class="disc teal"><svg><use href="#snow"/></svg></div><div><span class="tag good">Remedy</span><p>Design a dedicated coolant flow architecture around the winding cavity.</p></div></div>
+    </article>
+    <article class="card fix" style="padding:1.1rem 1.4rem">
+      <div class="side"><div class="disc rose"><svg><use href="#magnet"/></svg></div><div><span class="tag bad">Challenge</span><h4>Loss of magnetism during combustion</h4></div></div>
+      <div class="arrow"><svg><use href="#arrow"/></svg></div>
+      <div class="side"><div class="disc teal"><svg><use href="#shield"/></svg></div><div><span class="tag good">Remedy</span><p>Line the chamber with an insulating protective layer to shield the piston.</p></div></div>
+    </article>
+    <article class="card fix" style="padding:1.1rem 1.4rem">
+      <div class="side"><div class="disc rose"><svg><use href="#gauge"/></svg></div><div><span class="tag bad">Challenge</span><h4>Low torque output</h4></div></div>
+      <div class="arrow"><svg><use href="#arrow"/></svg></div>
+      <div class="side"><div class="disc teal"><svg><use href="#compass"/></svg></div><div><span class="tag good">Remedy</span><p>Lengthen the piston stroke and tune the ECU for the magnetic drive profile.</p></div></div>
+    </article>
+  </div>
+
+  <p class="sub" style="margin-top:1.2rem">Every one of these is a design problem, not a physics wall — and each has a defined line of attack.</p>
+</section>
+
+<!-- ================= 11. TARGET MARKET ================= -->
+<section class="slide light">
+  <p class="kicker">Target market</p>
+  <h2>Built for the drivers the EV left behind</h2>
+
+  <div class="grid g3">
+    <article class="card">
+      <div class="disc teal"><svg><use href="#road"/></svg></div>
+      <h3>The long-distance driver</h3>
+      <p>People who cover highway distance regularly and cannot plan a life around charging stops.</p>
+    </article>
+    <article class="card">
+      <div class="disc amber"><svg><use href="#mountain"/></svg></div>
+      <h3>Rural and semi-urban owners</h3>
+      <p>Drivers in regions where charging coverage is thin and a tow truck is hours away.</p>
+    </article>
+    <article class="card">
+      <div class="disc rose"><svg><use href="#car"/></svg></div>
+      <h3>Enthusiasts and DIY mechanics</h3>
+      <p>Owners who want the sound and feel of a real engine, and the right to open it themselves.</p>
+    </article>
+  </div>
+
+  <div class="banner" style="text-align:left">
+    <p style="margin:0 0 .9rem;font-size:.72rem;letter-spacing:.16em;font-weight:700;color:var(--teal)">WHY THEY CHOOSE DUALFORCE</p>
+    <div class="grid g3" style="margin:0;gap:1rem">
+      <div><strong>No range anxiety</strong><br><span style="color:#9FADBA;font-size:.88rem">fuel takes over where charge ends</span></div>
+      <div><strong>No limp-home</strong><br><span style="color:#9FADBA;font-size:.88rem">a dead battery is an inconvenience, not a rescue</span></div>
+      <div><strong>No service lock-in</strong><br><span style="color:#9FADBA;font-size:.88rem">open, repairable architecture</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 11B. APPLICATION OF THE PROJECT ================= -->
+<section class="slide light">
+  <p class="kicker">Application of the project</p>
+  <h2>One drivetrain platform, two vehicles</h2>
+  <p class="sub">The same solenoid hybrid architecture scales from a retro roadster to a full four-wheel platform.</p>
+
+  <div class="grid g2">
+    <article class="card">
+      <div class="row" style="align-items:center;margin-bottom:.4rem">
+        <div class="disc teal"><svg><use href="#bike"/></svg></div>
+        <h3 style="margin:0">The Bike</h3>
+      </div>
+      <p class="sub" style="margin:.1rem 0 1rem">A retro roadster in the spirit of a Royal Enfield, built around the solenoid engine</p>
+      <div class="steps" style="gap:.9rem">
+        <div class="row"><div class="disc teal"><svg><use href="#battery2"/></svg></div><div><h4>Dual battery + fuel tank</h4><p>A primary and secondary battery run alongside a conventional fuel tank for range flexibility.</p></div></div>
+        <div class="row"><div class="disc teal"><svg><use href="#chip"/></svg></div><div><h4>Snapdragon AI as ECU</h4><p>An on-board Snapdragon chip acts as the engine control unit, tuning efficiency in real time.</p></div></div>
+        <div class="row"><div class="disc teal"><svg><use href="#rotate"/></svg></div><div><h4>Regeneration on engine braking</h4><p>Under engine braking the block spins freely without power — the solenoid coils turn that motion back into current.</p></div></div>
+        <div class="row"><div class="disc teal"><svg><use href="#sensor"/></svg></div><div><h4>Multi-sensor ride control</h4><p>A sensor array continuously monitors the ride for stability and smoothness.</p></div></div>
+        <div class="row"><div class="disc teal"><svg><use href="#plug"/></svg></div><div><h4>Universal charging port</h4><p>One port, compatible across common charging standards.</p></div></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="row" style="align-items:center;margin-bottom:.4rem">
+        <div class="disc amber"><svg><use href="#car"/></svg></div>
+        <h3 style="margin:0">The Car</h3>
+      </div>
+      <p class="sub" style="margin:.1rem 0 1rem">Every bike system, carried onto a four-wheel platform — plus one more energy source</p>
+      <div class="steps" style="gap:.9rem">
+        <div class="row"><div class="disc amber"><svg><use href="#battery2"/></svg></div><div><h4>Same dual-battery, dual-energy base</h4><p>Primary and secondary battery, fuel tank, and the solenoid hybrid engine, scaled to four wheels.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#chip"/></svg></div><div><h4>Snapdragon-controlled efficiency</h4><p>The same AI ECU manages power split and real-time efficiency across all four wheels.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#rotate"/></svg></div><div><h4>Regenerative braking + sensor suite</h4><p>Engine-braking regeneration and the full sensor array carry over from the bike.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#droplet"/></svg></div><div><h4>On-board electrolysis</h4><p>A dedicated system splits water into hydrogen, adding a third, self-generated fuel source.</p></div></div>
+        <div class="row"><div class="disc amber"><svg><use href="#plug"/></svg></div><div><h4>Universal charging port</h4><p>The same cross-standard charging port, sized for the car's larger battery pack.</p></div></div>
+      </div>
+    </article>
+  </div>
+
+
+  
+
+  <div class="banner">Bike proves the platform. Car proves it scales — and adds water-to-hydrogen as a fourth energy path.</div>
+</section>
+
+<!-- ================= 12. CLOSING ================= -->
+<section class="slide dark">
+  <div class="close">
+    <div>
+      <p class="kicker">What comes next</p>
+      <h1>Two energies.<br>One crankshaft.<br>No compromise.</h1>
+      <div class="roadmap">
+        <div class="rm"><span class="n">01</span><span class="t">Prove the stroke</span><span class="d">Single-cylinder solenoid rig on the bench.</span></div>
+        <div class="rm"><span class="n">02</span><span class="t">Measure the torque</span><span class="d">Validate output, heat and eddy losses against targets.</span></div>
+        <div class="rm"><span class="n">03</span><span class="t">Build the demonstrator</span><span class="d">Multi-cylinder engine in a running vehicle.</span></div>
+      </div>
+      <p class="foot">DUALFORCE &nbsp;·&nbsp; SOLENOID HYBRID ENGINE &nbsp;·&nbsp; SEEKING BUILD PARTNERS AND EARLY INVESTORS</p>
+    </div>
+    <svg class="venn" viewBox="0 0 320 320" aria-hidden="true">
+      <circle cx="190" cy="115" r="92" fill="none" stroke="#17C3B2" stroke-width="1.8"/>
+      <circle cx="135" cy="198" r="92" fill="none" stroke="#F2A254" stroke-width="1.8"/>
+    </svg>
+  </div>
+</section>
+
+</main>
+
+<nav class="dots" id="dots" aria-label="Slide navigation"></nav>
+<p class="hint" id="hint">↑ ↓ or scroll to navigate</p>
+
+<script>
+(function () {
+  const deck   = document.getElementById('deck');
+  const slides = Array.from(deck.querySelectorAll('.slide'));
+  const dotBar = document.getElementById('dots');
+  const bar    = document.getElementById('progress');
+  const hint   = document.getElementById('hint');
+
+  // build dot navigation
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    b.addEventListener('click', () => s.scrollIntoView({ behavior: 'smooth' }));
+    dotBar.appendChild(b);
+  });
+  const dots = Array.from(dotBar.children);
+
+  // highlight the slide currently in view
+  let current = 0;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        current = slides.indexOf(e.target);
+        dots.forEach((d, i) => d.setAttribute('aria-current', i === current));
+        bar.style.width = ((current + 1) / slides.length * 100) + '%';
+      }
+    });
+  }, { threshold: 0.55 });
+  slides.forEach(s => io.observe(s));
+
+  // keyboard navigation
+  function go(delta) {
+    const next = Math.min(slides.length - 1, Math.max(0, current + delta));
+    slides[next].scrollIntoView({ behavior: 'smooth' });
+  }
+  window.addEventListener('keydown', e => {
+    const keysNext = ['ArrowDown', 'ArrowRight', 'PageDown', ' '];
+    const keysPrev = ['ArrowUp', 'ArrowLeft', 'PageUp'];
+    if (keysNext.includes(e.key))      { e.preventDefault(); go(1); }
+    else if (keysPrev.includes(e.key)) { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home')         { e.preventDefault(); slides[0].scrollIntoView({behavior:'smooth'}); }
+    else if (e.key === 'End')          { e.preventDefault(); slides[slides.length-1].scrollIntoView({behavior:'smooth'}); }
+  });
+
+  // fade the hint away after the first interaction
+  const kill = () => hint.classList.add('gone');
+  deck.addEventListener('scroll', kill, { once: true });
+  window.addEventListener('keydown', kill, { once: true });
+  setTimeout(kill, 6000);
+})();
+</script>
+</body>
+</html>
